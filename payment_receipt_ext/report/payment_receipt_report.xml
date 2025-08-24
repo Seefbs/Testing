@@ -1,109 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="report_payment_receipt_document_inherit" inherit_id="account.report_payment_receipt_document">
-    <!-- Replace the whole page body to avoid duplicates -->
-    <xpath expr="//div[@class='page']" position="replace">
-      <div class="page">
-        <!-- Title + number -->
-        <t t-set="doc_title">
-          <t t-if="o.payment_type == 'inbound'">Payment Receipt Voucher</t>
+  <xpath expr="//div[@class='page']" position="replace">
+    <div class="page">
+      <!-- Title + Number -->
+      <h3 class="mb-1">
+        <strong>
+          <t t-if="o.payment_type == 'inbound'">Payment Receipt</t>
           <t t-else="">Payment Voucher</t>
-        </t>
-        <h3 class="mb-1"><strong><t t-esc="doc_title"/></strong></h3>
-        <div class="mb-3">
-          <span>
-            <t t-if="o.payment_type == 'inbound'">Receipt No.:</t>
-            <t t-else="">Voucher No.:</t>
-            <t t-esc="o.name"/>
-          </span>
-        </div>
+        </strong>
+      </h3>
+      <div class="mb-3">
+        <span t-if="o.payment_type == 'inbound'">Receipt No.:</span>
+        <span t-else="">Voucher No.:</span>
+        <span class="ms-1" t-esc="o.name"/>
+      </div>
 
-        <!-- Top rows -->
-        <div class="mb-2 row">
-          <div class="col-6" t-if="o.date">
-            Payment Date: <span t-field="o.date"/>
-          </div>
-          <div class="col-6" t-if="o.x_instrument_date">
-            Instrument Date: <span t-field="o.x_instrument_date"/>
-          </div>
-        </div>
+      <!-- Top info as a borderless table -->
+      <table class="table table-borderless table-sm mb-3">
+        <tbody>
+          <tr t-if="o.date or o.x_instrument_date">
+            <td class="w-50" t-if="o.date">
+              Payment Date: <span t-field="o.date"/>
+            </td>
+            <td class="w-50" t-if="o.x_instrument_date">
+              Instrument Date: <span t-field="o.x_instrument_date"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <t t-if="o.partner_type == 'customer'">Customer:</t>
+              <t t-elif="o.partner_type == 'supplier'">Vendor:</t>
+              <t t-else="">Partner:</t>
+              <span class="ms-1" t-field="o.partner_id"/>
+            </td>
+            <td t-if="o.x_instrument_number">
+              Instrument Number: <span t-field="o.x_instrument_number"/>
+            </td>
+          </tr>
+          <tr>
+            <td t-if="o.amount">
+              Payment Amount:
+              <span class="ms-1" t-field="o.amount"
+                    t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+            </td>
+            <td t-if="values.get('display_payment_method') and o.payment_method_line_id">
+              Payment Method: <span class="ms-1" t-field="o.payment_method_line_id.name"/>
+            </td>
+          </tr>
+          <tr t-if="o.x_cheque_no or o.x_cheque_date">
+            <td t-if="o.x_cheque_no">
+              Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
+            </td>
+            <td t-if="o.x_cheque_date">
+              Cheque Date: <span class="ms-1" t-field="o.x_cheque_date"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <div class="mb-2 row">
-          <div class="col-6">
-            <t t-if="o.partner_type == 'customer'">Customer:</t>
-            <t t-elif="o.partner_type == 'supplier'">Vendor:</t>
-            <t t-else="">Partner:</t>
-            <span class="ms-1" t-field="o.partner_id"/>
-          </div>
-          <div class="col-6" t-if="values.get('display_payment_method') and o.payment_method_line_id">
-            Payment Method: <span class="ms-1" t-field="o.payment_method_line_id.name"/>
-          </div>
-        </div>
-
-        <div class="mb-2 row">
-          <div class="col-6" t-if="o.amount">
-            Payment Amount:
-            <span class="ms-1" t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-          </div>
-          <div class="col-6"/>
-        </div>
-
-        <!-- Cheque details (conditional) -->
-        <div class="mb-2 row" t-if="o.x_cheque_no or o.x_cheque_date">
-          <div class="col-6" t-if="o.x_cheque_no">
-            Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
-          </div>
-          <div class="col-6" t-if="o.x_cheque_date">
-            Cheque Date: <span class="ms-1" t-field="o.x_cheque_date"/>
-          </div>
-        </div>
-
-        <!-- Simple invoices table (default fields) -->
-        <t t-set="invoices" t-value="o.reconciled_invoice_ids"/>
-        <table t-if="invoices" class="table table-sm o_main_table mt-3">
-          <thead>
-            <tr>
-              <th>Invoice Date</th>
-              <th>Invoice Number</th>
-              <th>Reference</th>
-              <th class="text-end">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <t t-foreach="invoices" t-as="inv">
+      <!-- Invoices table (your logic, kept intact) -->
+      <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids"/>
+      <t t-foreach="invoices" t-as="inv">
+        <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
+           t-set="otherCurrency" t-value="True"/>
+      </t>
+      <table name="invoices" t-if="values['display_invoices']" class="table table-borderless">
+        <thead>
+          <tr>
+            <th><span>Invoice Date</span></th>
+            <th><span>Invoice Number</span></th>
+            <th><span>Reference</span></th>
+            <th t-if="otherCurrency" class="text-end"><span>Amount In Currency</span></th>
+            <th class="text-end"><span>Amount</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="invoices" t-as="inv">
+            <t t-if="inv.move_type != 'entry'">
               <tr>
                 <td><span t-field="inv.invoice_date"/></td>
                 <td><span t-field="inv.name"/></td>
                 <td><span t-field="inv.ref"/></td>
-                <td class="text-end"><span t-field="inv.amount_total" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/></td>
+                <td t-if="otherCurrency"/>
+                <td class="text-end">
+                  <span t-field="inv.amount_total"
+                        t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                </td>
+              </tr>
+              <tr t-foreach="inv._get_reconciled_invoices_partials()[0]" t-as="par">
+                <t t-set="payment" t-value="par[2]"/>
+                <td><span t-field="payment.move_id.date"/></td>
+                <td><span t-field="payment.move_id.name"/></td>
+                <td><span t-field="payment.payment_id.memo"/></td>
+                <t t-set="amountPayment" t-value="-par[0].amount"/>
+                <t t-set="amountInvoice" t-value="-par[1]"/>
+                <t t-set="currencyPayment" t-value="payment.currency_id"/>
+                <t t-set="currencyInvoice" t-value="inv.currency_id"/>
+                <td t-if="otherCurrency" class="text-end">
+                  <span t-if="currencyPayment != currencyInvoice"
+                        t-out="amountPayment"
+                        t-options="{'widget': 'monetary', 'display_currency': currencyPayment}"/>
+                </td>
+                <td class="text-end">
+                  <span t-out="amountInvoice"
+                        t-options="{'widget': 'monetary', 'display_currency': currencyInvoice}"/>
+                </td>
+              </tr>
+              <tr>
+                <td/>
+                <td><strong>Due Amount for <span t-field="inv.name"/></strong></td>
+                <td/>
+                <td t-if="otherCurrency"/>
+                <td class="text-end"><strong><span t-field="inv.amount_residual"/></strong></td>
               </tr>
             </t>
-          </tbody>
-        </table>
+          </t>
+        </tbody>
+      </table>
 
-        <!-- Bank account line -->
-        <div class="mt-2" t-if="o.partner_bank_id">
-          <t t-if="o.payment_type == 'outbound'">Transferred to</t>
-          <t t-else="">Receive at</t>
-          <t t-esc="': '"/>
-          <span t-esc="o.partner_bank_id.acc_number or o.partner_bank_id.name"/>
+      <!-- Bank account line -->
+      <div class="mt-2" t-if="o.partner_bank_id">
+        <t t-if="o.payment_type == 'outbound'">Transferred to</t>
+        <t t-else="">Receive at</t>
+        <t t-esc="': '"/>
+        <span t-esc="o.partner_bank_id.acc_number or o.partner_bank_id.name"/>
+      </div>
+
+      <!-- Memo last -->
+      <div class="mt-2" t-if="o.memo">
+        <strong>Memo:</strong> <span class="ms-1" t-field="o.memo"/>
+      </div>
+
+      <!-- Footer with extra spacing -->
+      <div class="mt-5 row">
+        <div class="col-6">
+          Created by: <span class="ms-1" t-field="o.create_uid"/>
         </div>
-
-        <!-- Memo last -->
-        <div class="mt-2" t-if="o.memo">
-          <strong>Memo:</strong> <span class="ms-1" t-field="o.memo"/>
-        </div>
-
-        <!-- Footer -->
-        <div class="mt-4 row">
-          <div class="col-6">
-            Created by: <span class="ms-1" t-field="o.create_uid"/>
-          </div>
-          <div class="col-6 text-end">
-            Signature: ____________________
-          </div>
+        <div class="col-6 text-end">
+          Signature: ____________________
         </div>
       </div>
-    </xpath>
-  </template>
+    </div>
+  </xpath>
+</template>
 </odoo>
