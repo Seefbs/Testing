@@ -4,12 +4,15 @@
   <xpath expr="//div[@class='page']" position="replace">
     <div class="page">
       <!-- Title + Number -->
-      <h3 class="mb-1">
-        <strong>
-          <t t-if="o.payment_type == 'inbound'">Payment Receipt</t>
-          <t t-else="">Payment Voucher</t>
-        </strong>
-      </h3>
+      <t t-set="layout_document_title">
+                    <t t-if="o.payment_type == 'inbound'">Receipt Voucher</t>
+                    <t t-else="True">Payment Voucher</t>
+                <!-- <div><span t-field="o.name"> -->
+                    <!-- Modify the document number based on the payment type -->
+                    <!-- <t t-if="o.payment_type == 'inbound'">Receipt No.:</t> -->
+                    <!-- <t t-else="True">Voucher No.:</t> -->
+               <!-- </span></div>
+      </t>
       <div class="mb-4" style="margin-bottom:14px;">
         <span t-if="o.payment_type == 'inbound'">Receipt No.:</span>
         <span t-else="">Voucher No.:</span>
