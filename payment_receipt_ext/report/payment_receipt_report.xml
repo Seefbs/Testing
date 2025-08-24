@@ -10,14 +10,14 @@
           <t t-else="">Payment Voucher</t>
         </strong>
       </h3>
-      <div class="mb-3">
+      <div class="mb-4" style="margin-bottom:14px;">
         <span t-if="o.payment_type == 'inbound'">Receipt No.:</span>
         <span t-else="">Voucher No.:</span>
         <span class="ms-1" t-esc="o.name"/>
       </div>
 
       <!-- Top info as a borderless table -->
-      <table class="table table-borderless table-sm mb-3">
+      <table class="table table-borderless table-sm mb-4" style="margin-bottom:14px;">
         <tbody>
           <tr t-if="o.date or o.x_instrument_date">
             <td class="w-50" t-if="o.date">
@@ -48,7 +48,7 @@
               Payment Method: <span class="ms-1" t-field="o.payment_method_line_id.name"/>
             </td>
           </tr>
-          <tr t-if="o.x_cheque_no or o.x_cheque_date">
+          <tr t-if="o.x_cheque_no || o.x_cheque_date">
             <td t-if="o.x_cheque_no">
               Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
             </td>
@@ -56,10 +56,16 @@
               Cheque Date: <span class="ms-1" t-field="o.x_cheque_date"/>
             </td>
           </tr>
+          <tr t-if="o.memo">
+            <td colspan="2">
+              <strong>Memo:</strong>
+              <span class="ms-1" t-field="o.memo"/>
+            </td>
+          </tr>
         </tbody>
       </table>
 
-      <!-- Invoices table (your logic, kept intact) -->
+      <!-- Invoices table (kept per your logic) -->
       <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids"/>
       <t t-foreach="invoices" t-as="inv">
         <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
@@ -127,13 +133,8 @@
         <span t-esc="o.partner_bank_id.acc_number or o.partner_bank_id.name"/>
       </div>
 
-      <!-- Memo last -->
-      <div class="mt-2" t-if="o.memo">
-        <strong>Memo:</strong> <span class="ms-1" t-field="o.memo"/>
-      </div>
-
       <!-- Footer with extra spacing -->
-      <div class="mt-5 row">
+      <div class="row mt-5" style="margin-top:32px;">
         <div class="col-6">
           Created by: <span class="ms-1" t-field="o.create_uid"/>
         </div>
