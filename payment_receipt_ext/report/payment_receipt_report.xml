@@ -48,7 +48,8 @@
               Payment Method: <span class="ms-1" t-field="o.payment_method_line_id.name"/>
             </td>
           </tr>
-          <tr t-if="o.x_cheque_no || o.x_cheque_date">
+          <!-- Cheque details (conditional) -->
+          <tr t-if="o.x_cheque_no or o.x_cheque_date">
             <td t-if="o.x_cheque_no">
               Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
             </td>
@@ -56,16 +57,16 @@
               Cheque Date: <span class="ms-1" t-field="o.x_cheque_date"/>
             </td>
           </tr>
+          <!-- Memo (single location only) -->
           <tr t-if="o.memo">
             <td colspan="2">
-              <strong>Memo:</strong>
-              <span class="ms-1" t-field="o.memo"/>
+              <strong>Memo:</strong><span class="ms-1" t-field="o.memo"/>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <!-- Invoices table (kept per your logic) -->
+      <!-- Your invoices table (unchanged logic) -->
       <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids"/>
       <t t-foreach="invoices" t-as="inv">
         <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
