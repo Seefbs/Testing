@@ -8,12 +8,12 @@
     <field name="arch" type="xml">
       <xpath expr="//field[@name='payment_method_line_id']" position="after">
         <group string="Instrument Info"
-               modifiers='{"invisible": [["journal_id.type", "not in", ["bank", "cash"]]]}'>
+               modifiers='{"invisible": [["x_show_instrument", "=", false]]}'>
           <field name="x_instrument_date"/>
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.name","not in",["Cheque","Cheque In","Cheque Out"]]]}'>
+               modifiers='{"invisible": [["x_show_cheque", "=", false]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
@@ -29,12 +29,12 @@
     <field name="arch" type="xml">
       <xpath expr="//field[@name='payment_method_line_id']" position="after">
         <group string="Instrument Info"
-               modifiers='{"invisible": [["journal_id.type", "not in", ["bank", "cash"]]]}'>
+               modifiers='{"invisible": [["x_show_instrument", "=", false]]}'>
           <field name="x_instrument_date"/>
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.name","not in",["Cheque","Cheque In","Cheque Out"]]]}'>
+               modifiers='{"invisible": [["x_show_cheque", "=", false]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
