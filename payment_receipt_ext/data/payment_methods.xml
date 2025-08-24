@@ -5,25 +5,21 @@
     <field name="name">Cash</field>
     <field name="code">cash_in</field>
     <field name="payment_type">inbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_transfer_in" model="account.payment.method">
     <field name="name">Transfer</field>
     <field name="code">transfer_in</field>
     <field name="payment_type">inbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_cheque_in" model="account.payment.method">
     <field name="name">Cheque</field>
     <field name="code">cheque_in</field>
     <field name="payment_type">inbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_benefit_in" model="account.payment.method">
     <field name="name">Benefit</field>
     <field name="code">benefit_in</field>
     <field name="payment_type">inbound</field>
-    <field name="active" eval="True"/>
   </record>
 
   <!-- Outbound methods -->
@@ -31,24 +27,20 @@
     <field name="name">Cash</field>
     <field name="code">cash_out</field>
     <field name="payment_type">outbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_transfer_out" model="account.payment.method">
     <field name="name">Transfer</field>
     <field name="code">transfer_out</field>
     <field name="payment_type">outbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_cheque_out" model="account.payment.method">
     <field name="name">Cheque</field>
     <field name="code">cheque_out</field>
     <field name="payment_type">outbound</field>
-    <field name="active" eval="True"/>
   </record>
   <record id="account_payment_method_benefit_out" model="account.payment.method">
     <field name="name">Benefit</field>
     <field name="code">benefit_out</field>
     <field name="payment_type">outbound</field>
-    <field name="active" eval="True"/>
   </record>
 </odoo>

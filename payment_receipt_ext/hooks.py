@@ -16,6 +16,8 @@ def post_init_add_payment_method_lines(cr, registry):
     journals = Journal.search([('type', 'in', ['bank', 'cash'])])
     for j in journals:
         for code, meth in inbound_methods.items():
+            if not meth:
+                continue
             if not Line.search_count([('journal_id', '=', j.id),
                                       ('payment_method_id', '=', meth.id),
                                       ('payment_type', '=', 'inbound')]):
@@ -25,6 +27,8 @@ def post_init_add_payment_method_lines(cr, registry):
                     'payment_type': 'inbound',
                 })
         for code, meth in outbound_methods.items():
+            if not meth:
+                continue
             if not Line.search_count([('journal_id', '=', j.id),
                                       ('payment_method_id', '=', meth.id),
                                       ('payment_type', '=', 'outbound')]):
