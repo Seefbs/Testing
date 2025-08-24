@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Journal: add Payment Method (Journal) for bank/cash types -->
+  <record id="view_account_journal_form_inherit_payment_kind" model="ir.ui.view">
+    <field name="name">account.journal.form.inherit.payment.kind</field>
+    <field name="model">account.journal</field>
+    <field name="inherit_id" ref="account.view_account_journal_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//group/field[@name='type']" position="after">
+        <field name="x_payment_kind"
+               modifiers='{"invisible": [["type", "not in", ["bank", "cash"]]]}'/>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Register Payment wizard: add extra fields -->
+  <record id="view_account_payment_register_form_inherit_extra" model="ir.ui.view">
+    <field name="name">account.payment.register.form.inherit.extra.fields</field>
+    <field name="model">account.payment.register</field>
+    <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='journal_id']" position="after">
+        <group string="Instrument Info"
+               modifiers='{"invisible": [["journal_id.type", "not in", ["bank", "cash"]]]}'>
+          <field name="x_instrument_date"/>
+          <field name="x_instrument_number"/>
+        </group>
+        <group string="Cheque Details"
+               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["journal_id.x_payment_kind","!=","cheque"]]}'>
+          <field name="x_cheque_no"/>
+          <field name="x_cheque_date"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>
