@@ -13,7 +13,7 @@
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","not in",["cheque_in","cheque_out"]]]}'>
+               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.x_line_kind","!=","cheque"]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
@@ -34,10 +34,27 @@
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","not in",["cheque_in","cheque_out"]]]}'>
+               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.x_line_kind","!=","cheque"]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Journal form: show Kind column on inbound/outbound payment method lines -->
+  <record id="view_account_journal_form_inherit_kind_column" model="ir.ui.view">
+    <field name="name">account.journal.form.inherit.kind.column</field>
+    <field name="model">account.journal</field>
+    <field name="inherit_id" ref="account.view_account_journal_form"/>
+    <field name="arch" type="xml">
+      <!-- Incoming methods list -->
+      <xpath expr="//page[@name='page_incoming_payments']//field[@name='inbound_payment_method_line_ids']/list/field[@name='name']" position="after">
+        <field name="x_line_kind"/>
+      </xpath>
+      <!-- Outgoing methods list -->
+      <xpath expr="//page[@name='page_outgoing_payments']//field[@name='outbound_payment_method_line_ids']/list/field[@name='name']" position="after">
+        <field name="x_line_kind"/>
       </xpath>
     </field>
   </record>

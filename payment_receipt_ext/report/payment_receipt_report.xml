@@ -36,7 +36,7 @@
       </div>
 
       <div class="mb-2 row"
-           t-if="o.journal_id.type in ('bank','cash') and o.payment_method_line_id and o.payment_method_line_id.payment_method_id.code in ('cheque_in','cheque_out')">
+           t-if="o.journal_id.type in ('bank','cash') and o.payment_method_line_id and o.payment_method_line_id.x_line_kind == 'cheque'">
         <div class="col-6" t-if="o.x_cheque_no">
           Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
         </div>
