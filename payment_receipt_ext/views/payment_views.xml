@@ -6,7 +6,7 @@
     <field name="model">account.payment.register</field>
     <field name="inherit_id" ref="account.view_account_payment_register_form"/>
     <field name="arch" type="xml">
-      <xpath expr="//field[@name='payment_method_line_id']" position="after">
+      <xpath expr="//group[2]" position="after">
         <group string="Instrument Info"
                modifiers='{"invisible": [["x_show_instrument", "=", false]]}'>
           <field name="x_instrument_date"/>
