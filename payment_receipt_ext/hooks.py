@@ -8,7 +8,6 @@ def post_init_add_payment_method_lines(cr, registry):
     Method = env['account.payment.method']
     Line = env['account.payment.method.line']
 
-    # Use built-in manual methods
     try:
         manual_in = env.ref('account.account_payment_method_manual_in')
     except Exception:
@@ -19,37 +18,26 @@ def post_init_add_payment_method_lines(cr, registry):
         manual_out = Method.search([('payment_type','=','outbound')], limit=1)
 
     journals = Journal.search([('type', 'in', ['bank', 'cash'])])
-    kinds = [
-        ('Cash', 'cash'),
-        ('Transfer', 'transfer'),
-        ('Cheque', 'cheque'),
-        ('Benefit', 'benefit'),
-    ]
+    names = ['Cheque', 'Transfer', 'Cash', 'Benefit']
 
     for j in journals:
-        # inbound lines
+        # inbound
         if manual_in:
-            for name, kind in kinds:
-                if not Line.search_count([('journal_id','=',j.id),
-                                          ('payment_type','=','inbound'),
-                                          ('name','=',name)]):
+            for nm in names:
+                if not Line.search_count([('journal_id','=',j.id), ('payment_type','=','inbound'), ('name','=',nm)]):
                     Line.create({
                         'journal_id': j.id,
                         'payment_type': 'inbound',
                         'payment_method_id': manual_in.id,
-                        'name': name,
-                        'x_line_kind': kind,
+                        'name': nm,
                     })
-        # outbound lines
+        # outbound
         if manual_out:
-            for name, kind in kinds:
-                if not Line.search_count([('journal_id','=',j.id),
-                                          ('payment_type','=','outbound'),
-                                          ('name','=',name)]):
+            for nm in names:
+                if not Line.search_count([('journal_id','=',j.id), ('payment_type','=','outbound'), ('name','=',nm)]):
                     Line.create({
                         'journal_id': j.id,
                         'payment_type': 'outbound',
                         'payment_method_id': manual_out.id,
-                        'name': name,
-                        'x_line_kind': kind,
+                        'name': nm,
                     })
