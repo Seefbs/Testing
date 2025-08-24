@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+  <record id="account_payment_method_cash" model="account.payment.method">
+    <field name="name">Cash</field>
+    <field name="code">cash</field>
+    <field name="payment_type">inbound_outbound</field>
+    <field name="available_journal_types">bank,cash</field>
+    <field name="active" eval="True"/>
+  </record>
+  <record id="account_payment_method_transfer" model="account.payment.method">
+    <field name="name">Transfer</field>
+    <field name="code">transfer</field>
+    <field name="payment_type">inbound_outbound</field>
+    <field name="available_journal_types">bank,cash</field>
+    <field name="active" eval="True"/>
+  </record>
+  <record id="account_payment_method_cheque" model="account.payment.method">
+    <field name="name">Cheque</field>
+    <field name="code">cheque</field>
+    <field name="payment_type">inbound_outbound</field>
+    <field name="available_journal_types">bank,cash</field>
+    <field name="active" eval="True"/>
+  </record>
+  <record id="account_payment_method_benefit" model="account.payment.method">
+    <field name="name">Benefit</field>
+    <field name="code">benefit</field>
+    <field name="payment_type">inbound_outbound</field>
+    <field name="available_journal_types">bank,cash</field>
+    <field name="active" eval="True"/>
+  </record>
+</odoo>

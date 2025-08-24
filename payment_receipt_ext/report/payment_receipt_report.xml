@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="report_payment_receipt_document_inherit" inherit_id="account.report_payment_receipt_document">
-    <!-- Insert header + extra blocks at top of the page (keep original content) -->
     <xpath expr="//div[@class='page']" position="inside">
       <div class="mb-2">
         <h3 class="mb-1">
@@ -44,7 +43,8 @@
         <div class="col-6"/>
       </div>
 
-      <div class="mb-2 row" t-if="o.journal_id.type in ('bank','cash') and o.journal_id.x_payment_kind == 'cheque'">
+      <div class="mb-2 row"
+           t-if="o.journal_id.type in ('bank','cash') and o.payment_method_line_id and o.payment_method_line_id.payment_method_id.code == 'cheque'">
         <div class="col-6" t-if="o.x_cheque_no">
           Cheque No.: <span class="ms-1" t-esc="o.x_cheque_no"/>
         </div>

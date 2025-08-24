@@ -10,7 +10,7 @@ class AccountPaymentRegister(models.TransientModel):
     x_cheque_date = fields.Date(string="Cheque Date")
 
     def _create_payments(self):
-        moves = super()._create_payments()
+        payments = super()._create_payments()
         vals = {}
         if self.x_instrument_date:
             vals['x_instrument_date'] = self.x_instrument_date
@@ -21,5 +21,5 @@ class AccountPaymentRegister(models.TransientModel):
         if self.x_cheque_date:
             vals['x_cheque_date'] = self.x_cheque_date
         if vals:
-            moves.write(vals)
-        return moves
+            payments.write(vals)
+        return payments
