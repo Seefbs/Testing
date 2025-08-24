@@ -11,7 +11,7 @@
                     <!-- Modify the document number based on the payment type -->
                     <!-- <t t-if="o.payment_type == 'inbound'">Receipt No.:</t> -->
                     <!-- <t t-else="True">Voucher No.:</t> -->
-               <!-- </span></div>
+               <!-- </span></div> -->
       </t>
       <div class="mb-4" style="margin-bottom:14px;">
         <span t-if="o.payment_type == 'inbound'">Receipt No.:</span>
