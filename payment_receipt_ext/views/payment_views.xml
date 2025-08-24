@@ -13,7 +13,7 @@
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","!=","cheque"]]}'>
+               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","not in",["cheque_in","cheque_out"]]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
@@ -27,14 +27,15 @@
     <field name="model">account.payment</field>
     <field name="inherit_id" ref="account.view_account_payment_form"/>
     <field name="arch" type="xml">
-      <xpath expr="//group/field[@name='partner_id']" position="after">
+      <!-- Insert right after the payment method line to keep context clear -->
+      <xpath expr="//field[@name='payment_method_line_id']" position="after">
         <group string="Instrument Info"
                modifiers='{"invisible": [["journal_id.type", "not in", ["bank", "cash"]]]}'>
           <field name="x_instrument_date"/>
           <field name="x_instrument_number"/>
         </group>
         <group string="Cheque Details"
-               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","!=","cheque"]]}'>
+               modifiers='{"invisible": ["|", ["journal_id.type","not in",["bank","cash"]], ["payment_method_line_id.payment_method_id.code","not in",["cheque_in","cheque_out"]]]}'>
           <field name="x_cheque_no"/>
           <field name="x_cheque_date"/>
         </group>
